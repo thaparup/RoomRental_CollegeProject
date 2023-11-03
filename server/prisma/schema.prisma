@@ -1,0 +1,251 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int        @id @default(autoincrement())
+  name             String
+  password_reset   Boolean    @default(false)
+  email            String     @unique
+  role             ROLE //enum 
+  createdAt        DateTime   @default(now())
+  hashRt           String?
+  disable_by_admin Boolean    @default(false)
+  password         String
+  kyc              Kyc?
+  verified         Boolean    @default(false)
+  property         Property?
+  profileImage     String?
+  sender           Messages[] @relation("sender")
+  receiver         Messages[] @relation("receiver")
+  Comment          Comment[]
+
+  Room        Room[]
+  Reservation Reservation[]
+
+  @@map("users")
+}
+
+model Messages {
+  id           Int      @id @default(autoincrement())
+  message      String
+  sender       User     @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver     User     @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  senderId     Int
+  receiverId   Int
+  // Virtual fields to access sender and receiver names
+  senderName   String   @map("_senderName")
+  receiverName String   @map("_receiverName")
+  createdAt    DateTime @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@map("messages")
+}
+
+model Comment {
+  id                    Int      @id @default(autoincrement())
+  text                  String
+  user                  User     @relation(fields: [userId], references: [id])
+  userId                Int
+  room                  Room     @relation(fields: [roomId], references: [id])
+  roomId                Int
+  commenterName         String?
+  commenterProfileImage String?
+  createdAt             DateTime @default(now())
+}
+
+model Kyc {
+  id                      Int      @id @default(autoincrement())
+  name                    String
+  gender                  GENDER
+  dob                     String
+  fatherName_husbandName  String
+  grandFather_fatherInLaw String
+  spouseName              String?
+  occupation              String
+  panNumber               String?
+  landlineNumber          String?
+  province                PROVINCE
+  district                String
+  mobileNumber            String
+  city                    String
+  permanentAddress        String
+  temporaryAddress        String
+  profileImage            String?
+  documentImage           String?
+  user                    User     @relation(fields: [userId], references: [id])
+  userId                  Int      @unique // relation scalar field (used in the `@relation` attribute above)
+  createdAt               DateTime @default(now())
+}
+
+model Property {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  room      Room[]
+  house     House[]
+  land      Land[]
+  createdAt DateTime @default(now())
+}
+
+model Room {
+  id                 Int           @id @default(autoincrement())
+  title              String
+  type               Type?
+  roomtype           RoomType?
+  occupancy          String
+  bathRoom           String
+  cost               String
+  address            String
+  size               String
+  description        String
+  feature            String
+  facilities         String?
+  facilitiesArray    String[]
+  property           Property      @relation(fields: [propertyId], references: [id])
+  propertyId         Int
+  Image              Image[]
+  Reservation        Reservation[]
+  Comment            Comment[]
+  termsAndConditions String?
+  booked             Boolean       @default(false)
+  accepted           Boolean       @default(false)
+  // tenantId           Int
+  // user               User                @relation(fields: [tenantId], references: [id])
+  // TermsAndCondition  TermsAndCondition[]
+  // User               User?               @relation(fields: [userId], references: [id])
+  // userId             Int?
+  latitude           String[]
+  myLat              String?
+  myLong             String?
+  tenantId           Int?
+  User               User?         @relation(fields: [userId], references: [id])
+  userId             Int?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @default(now())
+}
+
+model House {
+  id              Int       @id @default(autoincrement())
+  title           String
+  type            Type
+  occupancy       String
+  bathRoom        String
+  facilitiesArray String[]
+  address         String
+  bedRoom         String
+  diningRoom      String
+  kitchen         String
+  livingRoom      String
+  hall            String
+  area            String
+  yearBuilt       String
+  price           String
+  listingDate     String
+  closingDate     String
+  description     String
+  feature         String
+  facilities      String?
+  Property        Property? @relation(fields: [propertyId], references: [id])
+  propertyId      Int?
+  image           Image[]
+  booked          Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+}
+
+model Land {
+  id               Int       @id @default(autoincrement())
+  title            String
+  address          String
+  area             String
+  cost             String
+  type             Type
+  facedOn          FACEDON
+  distanceFromRoad String
+  nameOfRoad       String
+  description      String
+  image            Image[]
+  facilities       String?
+  facilitiesArray  String[]
+  reservations     String[]
+  Property         Property? @relation(fields: [propertyId], references: [id])
+  propertyId       Int?
+  createdAt        DateTime  @default(now())
+}
+
+model Image {
+  id      Int     @id @default(autoincrement())
+  image   String?
+  House   House?  @relation(fields: [houseId], references: [id])
+  houseId Int?
+
+  Land      Land?    @relation(fields: [landId], references: [id])
+  landId    Int?
+  Room      Room?    @relation(fields: [roomId], references: [id])
+  roomId    Int?
+  createdAt DateTime @default(now())
+}
+
+model Reservation {
+  id Int @id @default(autoincrement())
+
+  room         Room     @relation(fields: [roomId], references: [id])
+  roomId       Int
+  reservations String[]
+  accepted     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  tenantId     Int?
+  User         User?    @relation(fields: [tenantId], references: [id])
+}
+
+enum Type {
+  RENT
+  SELL
+}
+
+enum RoomType {
+  SHORT_TERM_BOOKING
+  LONG_TERM_BOOKING
+}
+
+enum ROLE {
+  ADMIN
+  CLIENT
+  SUPERADMIN
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+enum PROVINCE {
+  Province_1
+  Province_2
+  Province_3
+  Province_4
+  Province_5
+  Province_6
+  Province_7
+}
+
+enum FACEDON {
+  East
+  SouthEast
+  South
+  SouthWest
+  West
+  NorthWest
+  North
+  NorthEast
+}
