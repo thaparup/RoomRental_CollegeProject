@@ -1,0 +1,10 @@
+Table Building
+
+
+Table Room
+Table Hostel
+Table Flat
+Table Land
+
+Table Rent  ( timePeroid, price, )
+Table Sale  (totalPrice)
