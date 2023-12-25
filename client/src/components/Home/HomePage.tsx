@@ -13,6 +13,7 @@ import {
   GETALLROOM,
   GETHOUSEBYID,
   GETSINGLEIMAGEFORROOM,
+  GETUSER,
   HERO,
 } from "../../utils/ApiRoutes";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +24,7 @@ import { News } from "./News";
 import CallToAction from "./CallToAction";
 import axios from "axios";
 import ListingCard from "../My Listing/ListingCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ViewCard from "../ViewCard";
 import AllRoomCard from "../AllRoomCard";
@@ -31,6 +32,7 @@ import ShortTermBooking from "../ShortTermBooking";
 import LongTermBooking from "../LongTermBooking";
 import HouseRent from "../HouseRent";
 import HouseSell from "../HouseSell";
+import { useUserContext } from "../../context/user";
 
 const useStyles = createStyles((theme) => ({
   Contenttop: {
@@ -97,6 +99,27 @@ export default function HomePage() {
   // const heroSecton = async () => {
   //   return await FetchQuery(HERO);
   // };
+  const { user, setUser } = useUserContext()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const response = await axios.get(GETUSER, { withCredentials: true });
+        setUser(response.data);
+
+
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(user)
+
 
   const { classes } = useStyles();
 

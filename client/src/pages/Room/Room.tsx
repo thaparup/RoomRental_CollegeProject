@@ -26,14 +26,13 @@ export default function Room() {
     ["getRoom"],
     getMyRoom
   );
-  console.log(roomData);
-
-
-  
 
 
 
-      
+
+
+
+
 
   async function getImage() {
     try {
@@ -58,17 +57,17 @@ export default function Room() {
         </Text>
       ),
       labels: { confirm: 'Delete account', cancel: "No don't delete it" },
-      
-      confirmProps: { 
-      style: {
-        backgroundColor: 'red', 
-        
+
+      confirmProps: {
+        style: {
+          backgroundColor: 'red',
+
+        },
       },
-    },
       onCancel: () => {
         toast.success("Room Not Deleted")
       },
-      onConfirm: async() => {
+      onConfirm: async () => {
         try {
           const response = await axios.delete(DELETEROOM + `${id}`, {
             withCredentials: true,
@@ -85,7 +84,7 @@ export default function Room() {
       }
     }
     );
- 
+
   };
 
   return (

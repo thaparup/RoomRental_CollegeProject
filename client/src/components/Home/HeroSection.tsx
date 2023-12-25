@@ -115,26 +115,21 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const heroSecton = async () => {
-  return await FetchQuery(HERO);
-};
+
 
 export function HeroSection() {
-  const { data } = useQuery(["members"], heroSecton);
   const { classes } = useStyles();
 
-  const heading = data?.data.heading;
-  const subHeading = data?.data?.subHeading;
-  const description = data?.data?.description;
+
   return (
     <header
       className={classes.headerbg}
-      // style={{ backgroundImage: `url(${data?.data.image})` }}
+    // style={{ backgroundImage: `url(${data?.data.image})` }}
     >
       <div className={classes.overlay} />
       <div
         className={classes.root}
-        // style={{ backgroundImage: `url(${data?.data.image})` }}
+      // style={{ backgroundImage: `url(${data?.data.image})` }}
       >
         <Container size="lg">
           <div className={classes.inner}>
@@ -149,7 +144,7 @@ export function HeroSection() {
                   {/* {ReactHtmlParser(heading)} */}
                   Find Your Dream Property
                 </Text>{" "}
-                {ReactHtmlParser(subHeading)}
+                {/* {ReactHtmlParser(subHeading)} */}
               </Title>
 
               <Text className={classes.description} mt={30}>

@@ -20,7 +20,7 @@ export default function LongTermBooking({ roomRent }) {
     }
   }
   const { data: imageData } = useQuery(["getImageRoom"], getImage);
-  console.log(imageData);
+
 
   return (
     <div>
@@ -37,7 +37,7 @@ export default function LongTermBooking({ roomRent }) {
       >
         {roomRent?.map((room) => (
 
-          <Carousel.Slide>
+          <Carousel.Slide key={room.id}>
             <ViewCard
               title={room.title}
               description={room.description}

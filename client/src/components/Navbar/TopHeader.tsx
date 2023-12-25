@@ -61,6 +61,7 @@ import { MdLogout } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import UpdateLand from "../../pages/Land/UpdateLand";
 import Logo from "../../assets/logo.png"
+import { useUserContext } from "../../context/user";
 
 const smoothScroll = keyframes({
   "0%": { transform: "translateY(-40px)" },
@@ -148,9 +149,8 @@ const useStyles = createStyles((theme) => ({
     marginTop: theme.spacing.sm,
     padding: `${theme.spacing.md} calc(${theme.spacing.md} * 2)`,
     paddingBottom: theme.spacing.xl,
-    borderTop: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]
-    }`,
+    borderTop: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]
+      }`,
   },
 
   hiddenMobile: {
@@ -220,9 +220,8 @@ const useStyles = createStyles((theme) => ({
     zIndex: 4,
     backgroundColor: theme.colorScheme === "dark" ? "#1A1B1E" : "#fff",
     animation: `${smoothScroll} 1s forwards`,
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? "transparent" : theme.colors.gray[2]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colorScheme === "dark" ? "transparent" : theme.colors.gray[2]
+      }`,
   },
 
   toggle: {
@@ -273,9 +272,7 @@ const mockdata = [
   },
 ];
 
-interface HeaderTabsProps {
-  user: { name: string; image: string };
-}
+
 export function TopHeader() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
@@ -334,18 +331,10 @@ export function TopHeader() {
     }
   };
 
-  const getUser = async () => {
-    try {
-      const response = await axios.get(GETUSER, {
-        withCredentials: true,
-      });
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { user, setUser } = useUserContext()
 
-  const { data: user } = useQuery(["getUserKyc"], getUser);
+
+
   // console.log(user);
   return (
     <Box className="bg">
@@ -372,16 +361,16 @@ export function TopHeader() {
                 return {
                   backgroundColor: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).background
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).background
                     : "",
 
                   color: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).color
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).color
                     : "",
                   borderRadius: "12px",
                 };
@@ -396,18 +385,18 @@ export function TopHeader() {
                 return {
                   backgroundColor: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).background
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).background
                     : "",
                   "&:hover": {
                     backgroundColor: "#00acee",
                   },
                   color: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).color
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).color
                     : "",
                 };
               }}
@@ -421,21 +410,21 @@ export function TopHeader() {
                 return {
                   backgroundColor: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).background
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).background
                     : "",
 
                   color: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).color
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).color
                     : "",
                 };
               }}
             >
-               <Text className="text-black"> Rent</Text>
+              <Text className="text-black"> Rent</Text>
             </NavLink>
             <NavLink
               to="sale"
@@ -444,21 +433,21 @@ export function TopHeader() {
                 return {
                   backgroundColor: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).background
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).background
                     : "",
 
                   color: isActive
                     ? theme.fn.variant({
-                        variant: "light",
-                        color: theme.primaryColor,
-                      }).color
+                      variant: "light",
+                      color: theme.primaryColor,
+                    }).color
                     : "",
                 };
               }}
             >
-             <Text className="text-black"> Sale</Text>
+              <Text className="text-black"> Sale</Text>
             </NavLink>
 
             <NavLink to="">
@@ -497,24 +486,24 @@ export function TopHeader() {
             <NavLink
               to=""
               className={navbar ? classes.linkFixed : classes.link}
-              // style={({ isActive }) => {
-              //   return {
-              //     backgroundColor: isActive
-              //       ? theme.fn.variant({
-              //           variant: "light",
-              //           color: theme.primaryColor,
-              //         }).background
-              //       : "",
+            // style={({ isActive }) => {
+            //   return {
+            //     backgroundColor: isActive
+            //       ? theme.fn.variant({
+            //           variant: "light",
+            //           color: theme.primaryColor,
+            //         }).background
+            //       : "",
 
-              //     color: isActive
-              //       ? theme.fn.variant({
-              //           variant: "light",
-              //           color: theme.primaryColor,
-              //         }).color
-              //       : "",
-              //   };
+            //     color: isActive
+            //       ? theme.fn.variant({
+            //           variant: "light",
+            //           color: theme.primaryColor,
+            //         }).color
+            //       : "",
+            //   };
 
-              // }}
+            // }}
             >
               <Menu
                 trigger="hover"
@@ -591,7 +580,7 @@ export function TopHeader() {
               <Menu>
                 <Menu.Target>
                   <Avatar
-                    src={user?.data.profileImage}
+                    src={user?.profileImage}
                     alt="it's me"
                     radius="xl"
                   />
@@ -606,19 +595,10 @@ export function TopHeader() {
                 <Menu.Dropdown className="px-2">
                   <Menu.Item className="">
                     <label htmlFor="" className="text-stand">
-                      {user?.data.name}
+                      {user?.name}
                     </label>
                   </Menu.Item>
-                  <Menu.Item
-                    icon={<MdLogout size={14} />}
-                    className="translate-y-[-5px] text-primary"
-                  >
-                    <Link to="" onClick={handleLogout}>
-                      <label htmlFor="" className="text-stand">
-                        Logout
-                      </label>
-                    </Link>
-                  </Menu.Item>
+
                   <Menu.Item
                     icon={<AiOutlineEdit size={16} />}
                     className="translate-y-[-5px] text-primary"
@@ -640,6 +620,16 @@ export function TopHeader() {
                     <Link to="/messages">
                       <label htmlFor="" className="text-stand">
                         Messages
+                      </label>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item
+                    icon={<MdLogout size={14} />}
+                    className="translate-y-[-5px] text-primary"
+                  >
+                    <Link to="" onClick={handleLogout}>
+                      <label htmlFor="" className="text-stand">
+                        Logout
                       </label>
                     </Link>
                   </Menu.Item>
@@ -701,16 +691,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}
@@ -725,16 +715,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}
@@ -749,16 +739,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}
@@ -773,16 +763,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}
@@ -796,16 +786,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}
@@ -820,16 +810,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}
@@ -844,16 +834,16 @@ export function TopHeader() {
               return {
                 backgroundColor: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).background
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).background
                   : "",
 
                 color: isActive
                   ? theme.fn.variant({
-                      variant: "light",
-                      color: theme.primaryColor,
-                    }).color
+                    variant: "light",
+                    color: theme.primaryColor,
+                  }).color
                   : "",
               };
             }}

@@ -19,7 +19,7 @@ export default function ShortTermBooking({ roomBooking }) {
     }
   }
   const { data: imageData } = useQuery(["getImageRoom"], getImage);
-  console.log(roomBooking)
+
 
   return (
     <div>

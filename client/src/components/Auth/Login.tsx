@@ -45,20 +45,20 @@ export function Login() {
         Cookies.set("token", data.access_token);
         // const {data:user}= await FetchQuery(ME);
         // console.log(data.access_token);
- 
+
         if (data) {
-          navigate("/listing");
+          navigate("/");
         }
       },
       onError: async (error: any) => {
-        if(error.response.data.message){
+        if (error.response.data.message) {
           // toast.warn(error.response.data.message)
           notifications.show({
             title: 'Default notification',
             message: error.response.data.message + ' 🤥',
             color: 'red',
             autoClose: 2000,
-            
+
           })
         }
       },
@@ -84,7 +84,7 @@ export function Login() {
               placeholder="Enter Password"
               {...form.getInputProps("password")}
             />
-            
+
             <Group position="apart">
               <Checkbox label="Remember me" />
               <Anchor component="button" size="sm">
@@ -101,8 +101,8 @@ export function Login() {
             </Button>
           </Stack>
         </form>
-        <ToastContainer autoClose= {3000}/>
-   
+        <ToastContainer autoClose={3000} />
+
       </Paper>
     </>
   );
